@@ -1,0 +1,12 @@
+Source: ros-jade-geometric-shapes
+Section: misc
+Priority: extra
+Maintainer: Ioan Sucan <isucan@google.com>
+Build-Depends: debhelper (>= 9.0.0), libassimp-dev, libboost-all-dev, libconsole-bridge-dev, libeigen3-dev, libqhull-dev, pkg-config, ros-jade-catkin (>= 0.5.68), ros-jade-cmake-modules, ros-jade-eigen-stl-containers, ros-jade-octomap, ros-jade-random-numbers, ros-jade-resource-retriever, ros-jade-shape-msgs, ros-jade-visualization-msgs
+Homepage: http://ros.org/wiki/geometric_shapes
+Standards-Version: 3.9.2
+
+Package: ros-jade-geometric-shapes
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libassimp-dev, libboost-all-dev, libconsole-bridge-dev, libeigen3-dev, libqhull-dev, ros-jade-eigen-stl-containers, ros-jade-octomap, ros-jade-random-numbers, ros-jade-resource-retriever, ros-jade-shape-msgs, ros-jade-visualization-msgs
+Description: This package contains generic definitions of geometric shapes and bodies.
