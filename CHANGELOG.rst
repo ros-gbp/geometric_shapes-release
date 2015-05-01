@@ -2,14 +2,38 @@
 Changelog for package geometric_shapes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.3.9 (2015-04-30)
+0.4.3 (2015-04-30)
 ------------------
-* Prevent every mesh generation opening a new file handle.
 * add functions for better display of convex meshes
 * produce actual triangles for qhull mesh
 * Fixed inverted scale for convex meshes inside check
-* fix configure config.h.in when paths contain spaces (fix `#9 <https://github.com/ros-planning/geometric_shapes/issues/9>`_)
-* Contributors: Acorn, Christian Dornhege, Dave Hershberger, Dirk Thomas, Ioan A Sucan, Michael Ferguson
+* Contributors: Christian Dornhege, Michael Ferguson
+
+0.4.2 (2015-04-22)
+------------------
+* PR `#32 <https://github.com/ros-planning/geometric_shapes/issues/32>`_
+  Merge shape_tools package into geometric shapes
+* PR `#33 <https://github.com/ros-planning/geometric_shapes/issues/33>`_
+  Add run_depend on visualization_msgs
+* PR `#26 <https://github.com/ros-planning/geometric_shapes/issues/26>`_
+  Prevent every mesh generation opening a new file handle.
+* Contributors: Christian Dornhege, Dave Coleman, Jochen Sprickerhof, Michael Ferguson, Steven Peters
+
+0.4.1 (2014-07-07)
+------------------
+* update distro for travis testing. precise:=trusty
+* update to use debian console_bridge dependency. https://github.com/ros/rosdistro/issues/4633
+* Contributors: Ioan A Sucan, Tully Foote
+
+0.4.0 (2014-06-24)
+------------------
+* update usage of console_bridge to deal with version in Trusty
+* Merge pull request `#13 <https://github.com/ros-planning/geometric_shapes/issues/13>`_ from ros-planning/testing-in-travis
+  Run local and moveit_core tests in Travis builds.
+* Merge pull request `#18 <https://github.com/ros-planning/geometric_shapes/issues/18>`_ from dirk-thomas/hydro-devel
+  fix configure config.h.in when paths contain spaces fix `#9 <https://github.com/ros-planning/geometric_shapes/issues/9>`_
+* Run local and moveit_core tests in Travis builds.
+* Contributors: Acorn, Dave Hershberger, Dirk Thomas, Ioan A Sucan, William Woodall
 
 0.3.8 (2014-02-25)
 ------------------
