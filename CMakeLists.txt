@@ -7,15 +7,15 @@ if (NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-find_package(Eigen REQUIRED)
 find_package(Boost REQUIRED system filesystem)
 
 find_package(ASSIMP QUIET)
 if (NOT ASSIMP_FOUND)
+  find_package(PkgConfig REQUIRED)
   pkg_check_modules(ASSIMP assimp)
 endif()
 if (ASSIMP_FOUND)
-  if( NOT ${ASSIMP_VERSION} STRLESS "2.0.1150" )
+  if (NOT ${ASSIMP_VERSION} VERSION_LESS "2.0.1150")
     add_definitions(-DASSIMP_UNIFIED_HEADER_NAMES)
     message(STATUS "Assimp version has unified headers")
   else()
@@ -34,7 +34,9 @@ else()
 endif()
 
 find_package(octomap REQUIRED)
-find_package(catkin COMPONENTS shape_msgs resource_retriever shape_tools random_numbers console_bridge eigen_stl_containers)
+find_package(catkin COMPONENTS cmake_modules shape_msgs resource_retriever shape_tools random_numbers console_bridge eigen_stl_containers)
+
+find_package(Eigen REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include ${OCTOMAP_INCLUDE_DIRS}
