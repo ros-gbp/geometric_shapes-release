@@ -1,0 +1,46 @@
+ros-hydro-geometric-shapes (0.3.9-0quantal) quantal; urgency=high
+
+  * Prevent every mesh generation opening a new file handle.
+  * add functions for better display of convex meshes
+  * produce actual triangles for qhull mesh
+  * Fixed inverted scale for convex meshes inside check
+  * fix configure config.h.in when paths contain spaces (fix #9 <https://github.com/ros-planning/geometric_shapes/issues/9>)
+  * Contributors: Acorn, Christian Dornhege, Dave Hershberger, Dirk Thomas, Ioan A Sucan, Michael Ferguson
+
+ -- Ioan Sucan <isucan@google.com>  Thu, 30 Apr 2015 07:00:00 -0000
+
+ros-hydro-geometric-shapes (0.3.8-0quantal) quantal; urgency=high
+
+  * fix how we find eigen
+  * Contributors: Ioan Sucan
+
+ -- Ioan Sucan <isucan@google.com>  Tue, 25 Feb 2014 08:00:00 -0000
+
+ros-hydro-geometric-shapes (0.3.7-0quantal) quantal; urgency=high
+
+  * add build dep so we can find eigen, build fixes
+  * Contributors: Ioan A Sucan, Scott K Logan
+
+ -- Ioan Sucan <isucan@google.com>  Sun, 23 Feb 2014 08:00:00 -0000
+
+ros-hydro-geometric-shapes (0.3.6-0quantal) quantal; urgency=high
+
+  * Use assimp-dev dep for building
+  * Remove stray IS_ASSIMP3 define
+  * Invert Assimp version detect logic for greater accuracy
+  * Better feature detection for assimp version
+  * added travis support
+  * check for CATKIN_ENABLE_TESTING
+  * Contributors: Dave Hershberger, Ioan A Sucan, Lukas Bulwahn, Scott K Logan
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Fri, 31 Jan 2014 08:00:00 -0000
+
+ros-hydro-geometric-shapes (0.3.5-0quantal) quantal; urgency=high
+
+  * Fix syntax error.
+  * white space fixes (tabs are now spaces)
+  * add comments for shape definitions
+
+ -- Ioan Sucan <isucan@willowgarage.com>  Mon, 23 Sep 2013 07:00:00 -0000
+
+
