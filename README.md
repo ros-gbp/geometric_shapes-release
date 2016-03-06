@@ -1,3 +1,24 @@
+## geometric_shapes (indigo) - 0.4.4-0
+
+The packages in the `geometric_shapes` repository were released into the `indigo` distro by running `/usr/bin/bloom-release -r indigo -t indigo geometric_shapes` on `Sun, 06 Mar 2016 10:16:35 -0000`
+
+The `geometric_shapes` package was released.
+
+Version of package(s) in repository `geometric_shapes`:
+- upstream repository: https://github.com/ros-planning/geometric_shapes.git
+- release repository: https://github.com/ros-gbp/geometric_shapes-release.git
+- rosdistro version: `0.4.3-0`
+- old version: `0.4.3-0`
+- new version: `0.4.4-0`
+
+Versions of tools used:
+- bloom version: `0.5.20`
+- catkin_pkg version: `0.2.10`
+- rosdep version: `0.11.4`
+- rosdistro version: `0.4.4`
+- vcstools version: `0.1.38`
+
+
 ## geometric_shapes (jade) - 0.4.3-0
 
 The packages in the `geometric_shapes` repository were released into the `jade` distro by running `/usr/bin/bloom-release -r jade -t jade geometric_shapes` on `Fri, 01 May 2015 04:57:16 -0000`
