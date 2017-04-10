@@ -1,3 +1,26 @@
+## geometric_shapes (lunar) - 0.5.2-0
+
+The packages in the `geometric_shapes` repository were released into the `lunar` distro by running `/usr/bin/bloom-release geometric_shapes -r lunar -t lunar --new-track` on `Mon, 10 Apr 2017 23:33:00 -0000`
+
+The `geometric_shapes` package was released.
+
+Version of package(s) in repository `geometric_shapes`:
+
+- upstream repository: https://github.com/ros-planning/geometric_shapes.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `0.5.2-0`
+
+Versions of tools used:
+
+- bloom version: `0.5.26`
+- catkin_pkg version: `0.3.1`
+- rosdep version: `0.11.5`
+- rosdistro version: `0.6.2`
+- vcstools version: `0.1.39`
+
+
 ## geometric_shapes (kinetic) - 0.5.2-0
 
 The packages in the `geometric_shapes` repository were released into the `kinetic` distro by running `/usr/bin/bloom-release --rosdistro kinetic --track kinetic geometric_shapes` on `Thu, 20 Oct 2016 02:07:35 -0000`
