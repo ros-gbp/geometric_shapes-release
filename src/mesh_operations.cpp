@@ -46,15 +46,9 @@
 #include <console_bridge/console.h>
 #include <resource_retriever/retriever.h>
 
-#if defined(ASSIMP_UNIFIED_HEADER_NAMES)
 #include <assimp/scene.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
-#else
-#include <assimp/aiScene.h>
-#include <assimp/assimp.hpp>
-#include <assimp/aiPostProcess.h>
-#endif
 
 #include <Eigen/Geometry>
 
@@ -237,25 +231,48 @@ Mesh* createMeshFromBinary(const char *buffer, std::size_t size, const Eigen::Ve
   {
     hint = assimp_hint.substr(pos + 1);
     std::transform(hint.begin(), hint.end(), hint.begin(), ::tolower);
-    if (hint.find("stl") != std::string::npos)
-      hint = "stl";
   }
+  if (hint.empty())
+    hint = assimp_hint; // send entire file name as hint if no extension was found
 
   // Create an instance of the Importer class
   Assimp::Importer importer;
 
+  // Issue #38 fix: as part of the post-processing, we remove all other components in file but
+  // the meshes, as anyway the resulting shapes:Mesh object just receives vertices and triangles.
+  importer.SetPropertyInteger(AI_CONFIG_PP_RVC_FLAGS,
+          aiComponent_NORMALS                  |
+          aiComponent_TANGENTS_AND_BITANGENTS  |
+          aiComponent_COLORS                   |
+          aiComponent_TEXCOORDS                |
+          aiComponent_BONEWEIGHTS              |
+          aiComponent_ANIMATIONS               |
+          aiComponent_TEXTURES                 |
+          aiComponent_LIGHTS                   |
+          aiComponent_CAMERAS                  |
+          aiComponent_MATERIALS);
 
-  // And have it read the given file with some postprocessing
+  // And have it read the given file with some post-processing
   const aiScene* scene = importer.ReadFileFromMemory(reinterpret_cast<const void*>(buffer), size,
                                                      aiProcess_Triangulate            |
                                                      aiProcess_JoinIdenticalVertices  |
                                                      aiProcess_SortByPType            |
-                                                     aiProcess_OptimizeGraph          |
-                                                     aiProcess_OptimizeMeshes, assimp_hint.c_str());
-  if (scene)
-    return createMeshFromAsset(scene, scale, assimp_hint);
-  else
+                                                     aiProcess_RemoveComponent, hint.c_str());
+  if (!scene)
     return NULL;
+
+  // Assimp enforces Y_UP convention by rotating models with different conventions.
+  // However, that behaviour is confusing and doesn't match the ROS convention
+  // where the Z axis is pointing up.
+  // Hopefully this doesn't undo legit use of the root node transformation...
+  // Note that this is also what RViz does internally.
+  scene->mRootNode->mTransformation = aiMatrix4x4();
+
+  // These post processing steps flatten the root node transformation into child nodes,
+  // so they must be delayed until after clearing the root node transform above.
+  importer.ApplyPostProcessing(aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph);
+
+  return createMeshFromAsset(scene, scale, hint);
 }
 
 Mesh* createMeshFromResource(const std::string& resource, const Eigen::Vector3d &scale)
