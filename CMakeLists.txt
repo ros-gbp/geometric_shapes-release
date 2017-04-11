@@ -1,7 +1,5 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.3)
 project(geometric_shapes)
-
-add_compile_options(-std=c++11)
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
@@ -21,7 +19,9 @@ find_package(Boost REQUIRED system filesystem)
 
 find_package(console_bridge REQUIRED)
 
-find_package(Eigen3 REQUIRED)
+# required to find 'Eigen' in indigo
+find_package(cmake_modules REQUIRED)
+find_package(Eigen REQUIRED)
 
 find_package(octomap REQUIRED)
 
@@ -34,8 +34,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  INCLUDE_DIRS
-    include
+  INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME} ${OCTOMAP_LIBRARIES}
   CATKIN_DEPENDS
     eigen_stl_containers
@@ -43,7 +42,7 @@ catkin_package(
     shape_msgs
     visualization_msgs
   DEPENDS
-    EIGEN3
+    Eigen
     OCTOMAP
     console_bridge
   )
@@ -54,7 +53,7 @@ if (HAVE_QHULL_2011)
 endif()
 
 include_directories(include)
-include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${OCTOMAP_INCLUDE_DIRS})
+include_directories(${EIGEN_INCLUDE_DIRS} ${Boost_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${OCTOMAP_INCLUDE_DIRS})
 include_directories(${catkin_INCLUDE_DIRS} ${console_bridge_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}

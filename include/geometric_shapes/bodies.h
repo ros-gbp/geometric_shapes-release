@@ -37,17 +37,13 @@
 #ifndef GEOMETRIC_SHAPES_BODIES_
 #define GEOMETRIC_SHAPES_BODIES_
 
-#if __cplusplus <= 199711L
-#error This header requires at least C++11
-#endif
-
 #include "geometric_shapes/shapes.h"
 #include <eigen_stl_containers/eigen_stl_containers.h>
+#include <boost/scoped_ptr.hpp>
 #include <random_numbers/random_numbers.h>
+#include <vector>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include <memory>
-#include <vector>
 
 /** \brief This set of classes allows quickly detecting whether a given point
    is inside an object or not. This capability is useful when removing
@@ -78,10 +74,10 @@ struct BoundingCylinder
 class Body;
 
 /** \brief Shared pointer to a Body */
-typedef std::shared_ptr<Body> BodyPtr;
+typedef boost::shared_ptr<Body> BodyPtr;
 
 /** \brief Shared pointer to a const Body */
-typedef std::shared_ptr<const Body> BodyConstPtr;
+typedef boost::shared_ptr<const Body> BodyConstPtr;
 
 /** \brief A body is a shape + its pose. Point inclusion, ray
     intersection can be tested, volumes and bounding spheres can
@@ -460,7 +456,7 @@ protected:
   };
 
   // shape-dependent data; keep this in one struct so that a cheap pointer copy can be done in cloneAt()
-  std::shared_ptr<MeshData> mesh_data_;
+  boost::shared_ptr<MeshData> mesh_data_;
 
   // pose/padding/scaling-dependent values & values computed for convenience and fast upcoming computations
   Eigen::Affine3d             i_pose_;
@@ -475,7 +471,7 @@ protected:
   EigenSTL::vector_Vector3d  *scaled_vertices_;
 
 private:
-  std::unique_ptr<EigenSTL::vector_Vector3d> scaled_vertices_storage_;
+  boost::scoped_ptr<EigenSTL::vector_Vector3d> scaled_vertices_storage_;
 
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -532,10 +528,10 @@ private:
 };
 
 /** \brief Shared pointer to a Body */
-typedef std::shared_ptr<Body> BodyPtr;
+typedef boost::shared_ptr<Body> BodyPtr;
 
 /** \brief Shared pointer to a const Body */
-typedef std::shared_ptr<const Body> BodyConstPtr;
+typedef boost::shared_ptr<const Body> BodyConstPtr;
 
 }
 
