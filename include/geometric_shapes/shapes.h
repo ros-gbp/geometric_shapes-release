@@ -37,10 +37,14 @@
 #ifndef GEOMETRIC_SHAPES_SHAPES_
 #define GEOMETRIC_SHAPES_SHAPES_
 
+#if __cplusplus <= 199711L
+#error This header requires at least C++11
+#endif
+
 #include <cstdlib>
 #include <vector>
 #include <iostream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <string>
 
 namespace octomap
@@ -250,7 +254,7 @@ class OcTree : public Shape
 {
 public:
   OcTree();
-  OcTree(const boost::shared_ptr<const octomap::OcTree> &t);
+  OcTree(const std::shared_ptr<const octomap::OcTree> &t);
 
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
@@ -260,15 +264,15 @@ public:
   virtual void scaleAndPadd(double scale, double padd);
   virtual bool isFixed() const;
 
-  boost::shared_ptr<const octomap::OcTree> octree;
+  std::shared_ptr<const octomap::OcTree> octree;
 };
 
 
 /** \brief Shared pointer to a Shape */
-typedef boost::shared_ptr<Shape> ShapePtr;
+typedef std::shared_ptr<Shape> ShapePtr;
 
 /** \brief Shared pointer to a const Shape */
-typedef boost::shared_ptr<const Shape> ShapeConstPtr;
+typedef std::shared_ptr<const Shape> ShapeConstPtr;
 
 }
 
