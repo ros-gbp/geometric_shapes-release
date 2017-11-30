@@ -2,38 +2,21 @@
 Changelog for package geometric_shapes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.5.3 (2017-11-26)
-------------------
-* [enhance] Add warning about common Assimp bug (`#63 <https://github.com/ros-planning/geometric_shapes/issues/63>`_)
-* [maintenance] Update maintainers (`#66 <https://github.com/ros-planning/geometric_shapes/issues/66>`_)
-* Contributors: Dave Coleman
-
-0.5.2 (2016-10-20)
+0.4.5 (2016-10-20)
 ------------------
 * [fix] mesh with too many vertices (`#39 <https://github.com/ros-planning/geometric_shapes/issues/39>`_) (`#60 <https://github.com/ros-planning/geometric_shapes/issues/60>`_)
-* [fix] gcc6 build error (`#56 <https://github.com/ros-planning/geometric_shapes/issues/56>`_)
+* [fix] gcc6 build error (`#56 <https://github.com/ros-planning/geometric_shapes/issues/55>`_)
 * [fix] Clear root transformation on imported Collada meshes. `#52 <https://github.com/ros-planning/geometric_shapes/issues/52>`_
+* [fix] incorrect hint always sent to Assimp, improved STL reading (`#24 <https://github.com/ros-planning/geometric_shapes/issues/24>`_)
+* [fix] append cmake module path instead of prepending. Fixes `#22 <https://github.com/ros-planning/geometric_shapes/issues/22>`_
+* [fix] FindQhull with non-debian systems (`#30 <https://github.com/ros-planning/geometric_shapes/issues/30>`_)
 * [improve] relax mesh containment test (`#58 <https://github.com/ros-planning/geometric_shapes/issues/58>`_)
 * [maintenance] Switch boost::shared_ptr to std::shared_ptr. `#57 <https://github.com/ros-planning/geometric_shapes/pull/57>`_
-* Contributors: Dave Coleman, Isaac I.Y. Saito, Lukas Bulwahn, Maarten de Vries, Michael Goerner
-
-0.5.1 (2016-08-23)
-------------------
-* add c++11 safe-guards to the respective headers (`#51 <https://github.com/ros-planning/geometric_shapes/issues/51>`_)
-  This is, to be polite and point problems that might arise it out to users.
-* Fix incorrect hint always sent to Assimp, improved STL reading (`#24 <https://github.com/ros-planning/geometric_shapes/issues/24>`_)
-* Contributors: Dave Coleman, Michael Görner
-
-0.5.0 (2016-07-31)
-------------------
-* [fix] append cmake module path instead of prepending (`#22 <https://github.com/ros-planning/geometric_shapes/issues/22>`_)
-* [fix] FindQhull with non-debian systems (`#30 <https://github.com/ros-planning/geometric_shapes/issues/30>`_). See https://github.com/PointCloudLibrary/pcl/pull/852
-* [sys] Use std::shared_ptr for compatibility with FCL 0.5. `#47 <https://github.com/ros-planning/geometric_shapes/issues/47>`_
-* [sys] Switch to eigen 3 (`#46 <https://github.com/ros-planning/geometric_shapes/issues/46>`_)
-* [sys] Switched to C++11 `#44 <https://github.com/ros-planning/geometric_shapes/issues/44>`_
-* [sys] add notice that project will be built in Release mode
-* [sys] Remove link_directories, deprecated assimp code
-* Contributors: Dave Coleman, Ioan A Sucan, Jochen Sprickerhof, Maarten de Vries, Michael Goerner
+* [maintenance] Fix travis for Indigo (`#53 <https://github.com/ros-planning/geometric_shapes/issues/53>`_)
+* [maintenance] catkin_lint and cleanup `#43 <https://github.com/ros-planning/geometric_shapes/issues/43>`_
+* [maintenance] add notice that project will be built in Release mode
+* [maintenance] cmake cleanup and improvement (`#35 <https://github.com/ros-planning/geometric_shapes/issues/35>`_ and others)
+* Contributors: Dave Coleman, Ioan A Sucan, Isaac I.Y. Saito, Jochen Sprickerhof, Jorge Santos Simon, Lukas Bulwahn, Maarten de Vries, Michael Goerner,
 
 0.4.4 (2016-03-06)
 ------------------

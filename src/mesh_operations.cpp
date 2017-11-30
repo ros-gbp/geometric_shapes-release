@@ -297,10 +297,7 @@ Mesh* createMeshFromResource(const std::string& resource, const Eigen::Vector3d 
 
   Mesh *m = createMeshFromBinary(reinterpret_cast<const char*>(res.data.get()), res.size, scale, resource);
   if (!m)
-  {
-    logWarn("Assimp reports no scene in %s.", resource.c_str());
-    logWarn("This could be because of a resource filename that is too long for the Assimp library, a known bug. As a workaround shorten the filename/path.");
-  }
+    logWarn("Assimp reports no scene in %s", resource.c_str());
   return m;
 }
 
