@@ -37,7 +37,7 @@
 #include "geometric_shapes/shapes.h"
 #include <eigen_stl_containers/eigen_stl_containers.h>
 #include <octomap/octomap.h>
-#include "geometric_shapes/console_bridge_compatibility.hpp"
+#include <console_bridge/console.h>
 
 namespace shapes
 {
