@@ -62,7 +62,7 @@ Shape* constructShapeFromMsg(const shape_msgs::Mesh& shape_msg)
   if (shape_msg.triangles.empty() || shape_msg.vertices.empty())
   {
     CONSOLE_BRIDGE_logWarn("Mesh definition is empty");
-    return NULL;
+    return nullptr;
   }
   else
   {
@@ -83,36 +83,35 @@ Shape* constructShapeFromMsg(const shape_msgs::Mesh& shape_msg)
 
 Shape* constructShapeFromMsg(const shape_msgs::SolidPrimitive& shape_msg)
 {
-  Shape* shape = NULL;
+  Shape* shape = nullptr;
   if (shape_msg.type == shape_msgs::SolidPrimitive::SPHERE)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::SPHERE_RADIUS)
+    if (shape_msg.dimensions.size() >=
+        geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::SPHERE>::value)
       shape = new Sphere(shape_msg.dimensions[shape_msgs::SolidPrimitive::SPHERE_RADIUS]);
   }
   else if (shape_msg.type == shape_msgs::SolidPrimitive::BOX)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::BOX_X &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::BOX_Y &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::BOX_Z)
+    if (shape_msg.dimensions.size() >= geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value)
       shape = new Box(shape_msg.dimensions[shape_msgs::SolidPrimitive::BOX_X],
                       shape_msg.dimensions[shape_msgs::SolidPrimitive::BOX_Y],
                       shape_msg.dimensions[shape_msgs::SolidPrimitive::BOX_Z]);
   }
   else if (shape_msg.type == shape_msgs::SolidPrimitive::CYLINDER)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CYLINDER_RADIUS &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CYLINDER_HEIGHT)
+    if (shape_msg.dimensions.size() >=
+        geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CYLINDER>::value)
       shape = new Cylinder(shape_msg.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS],
                            shape_msg.dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT]);
   }
   else if (shape_msg.type == shape_msgs::SolidPrimitive::CONE)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CONE_RADIUS &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CONE_HEIGHT)
+    if (shape_msg.dimensions.size() >=
+        geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CONE>::value)
       shape = new Cone(shape_msg.dimensions[shape_msgs::SolidPrimitive::CONE_RADIUS],
                        shape_msg.dimensions[shape_msgs::SolidPrimitive::CONE_HEIGHT]);
   }
-  if (shape == NULL)
+  if (shape == nullptr)
     CONSOLE_BRIDGE_logError("Unable to construct shape corresponding to shape_msg of type %d", (int)shape_msg.type);
 
   return shape;
@@ -138,7 +137,7 @@ public:
     return constructShapeFromMsg(shape_msg);
   }
 };
-}
+}  // namespace
 
 Shape* constructShapeFromMsg(const ShapeMsg& shape_msg)
 {
@@ -155,7 +154,7 @@ public:
   {
   }
 
-  void operator()(const shape_msgs::Plane& shape_msg) const
+  void operator()(const shape_msgs::Plane& /* shape_msg */) const
   {
     throw std::runtime_error("No visual markers can be constructed for planes");
   }
@@ -174,7 +173,7 @@ private:
   bool use_mesh_triangle_list_;
   visualization_msgs::Marker* marker_;
 };
-}
+}  // namespace
 
 bool constructMarkerFromShape(const Shape* shape, visualization_msgs::Marker& marker, bool use_mesh_triangle_list)
 {
@@ -202,7 +201,7 @@ namespace
 class ShapeVisitorComputeExtents : public boost::static_visitor<Eigen::Vector3d>
 {
 public:
-  Eigen::Vector3d operator()(const shape_msgs::Plane& shape_msg) const
+  Eigen::Vector3d operator()(const shape_msgs::Plane& /* shape_msg */) const
   {
     Eigen::Vector3d e(0.0, 0.0, 0.0);
     return e;
@@ -224,7 +223,7 @@ public:
     return e;
   }
 };
-}
+}  // namespace
 
 Eigen::Vector3d computeShapeExtents(const ShapeMsg& shape_msg)
 {
@@ -485,7 +484,7 @@ void saveAsText(const Shape* shape, std::ostream& out)
 
 Shape* constructShapeFromText(std::istream& in)
 {
-  Shape* result = NULL;
+  Shape* result = nullptr;
   if (in.good() && !in.eof())
   {
     std::string type;
@@ -577,4 +576,4 @@ const std::string& shapeStringName(const Shape* shape)
     return empty;
   }
 }
-}
+}  // namespace shapes

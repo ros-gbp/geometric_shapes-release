@@ -54,7 +54,7 @@ public:
   {
   }
 
-  void SetUp()
+  void SetUp() override
   {
     // BOX
     shapes::Box box(1.0, 1.0, 1.0);
@@ -66,9 +66,9 @@ public:
     loaded_convex_meshes.push_back(new bodies::ConvexMesh(loaded_meshes.back()));
   }
 
-  void TearDown()
+  void TearDown() override
   {
-    for (int i = 0; i < shape_meshes.size(); ++i)
+    for (size_t i = 0; i < shape_meshes.size(); ++i)
     {
       delete shape_meshes[i];
       delete loaded_meshes[i];
@@ -78,7 +78,7 @@ public:
     }
   }
 
-  ~CompareMeshVsPrimitive()
+  ~CompareMeshVsPrimitive() override
   {
   }
 
@@ -95,11 +95,8 @@ protected:
 TEST_F(CompareMeshVsPrimitive, ContainsPoint)
 {
   // Any point inside a mesh must be inside the other too
-  for (int i = 0; i < shape_meshes.size(); ++i)
+  for (size_t i = 0; i < shape_meshes.size(); ++i)
   {
-    shapes::Mesh* shape_ms = shape_meshes[i];
-    shapes::Mesh* loaded_ms = loaded_meshes[i];
-
     bodies::Body* shape_cms = shape_convex_meshes[i];
     bodies::Body* loaded_cms = loaded_convex_meshes[i];
 
@@ -120,11 +117,8 @@ TEST_F(CompareMeshVsPrimitive, ContainsPoint)
 TEST_F(CompareMeshVsPrimitive, IntersectsRay)
 {
   // Random rays must intersect both meshes nearly at the same points
-  for (int i = 0; i < shape_meshes.size(); ++i)
+  for (size_t i = 0; i < shape_meshes.size(); ++i)
   {
-    shapes::Mesh* shape_ms = shape_meshes[i];
-    shapes::Mesh* loaded_ms = loaded_meshes[i];
-
     bodies::Body* shape_cms = shape_convex_meshes[i];
     bodies::Body* loaded_cms = loaded_convex_meshes[i];
 
@@ -146,7 +140,7 @@ TEST_F(CompareMeshVsPrimitive, IntersectsRay)
       //    }
 
       EXPECT_EQ(vi1.size(), vi2.size());
-      if (vi1.size() > 0 && vi2.size() > 0)
+      if (!vi1.empty() && !vi2.empty())
       {
         EXPECT_NEAR(vi1[0].x(), vi2[0].x(), 0.01);
         EXPECT_NEAR(vi1[0].y(), vi2[0].y(), 0.01);
@@ -163,13 +157,10 @@ TEST_F(CompareMeshVsPrimitive, IntersectsRay)
 TEST_F(CompareMeshVsPrimitive, BoundingSphere)
 {
   // Bounding spheres must be nearly identical
-  for (int i = 0; i < shape_meshes.size(); ++i)
+  for (size_t i = 0; i < shape_meshes.size(); ++i)
   {
     shapes::Mesh* shape_ms = shape_meshes[i];
     shapes::Mesh* loaded_ms = loaded_meshes[i];
-
-    bodies::Body* shape_cms = shape_convex_meshes[i];
-    bodies::Body* loaded_cms = loaded_convex_meshes[i];
 
     shapes::Sphere shape(1.0);
     Eigen::Vector3d center1, center2;
