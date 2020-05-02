@@ -33,6 +33,7 @@
  *********************************************************************/
 
 #include <geometric_shapes/shape_extents.h>
+#include <geometric_shapes/solid_primitive_dims.h>
 #include <limits>
 
 void geometric_shapes::getShapeExtents(const shape_msgs::SolidPrimitive& shape_msg, double& x_extent, double& y_extent,
@@ -42,14 +43,13 @@ void geometric_shapes::getShapeExtents(const shape_msgs::SolidPrimitive& shape_m
 
   if (shape_msg.type == shape_msgs::SolidPrimitive::SPHERE)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::SPHERE_RADIUS)
+    if (shape_msg.dimensions.size() >=
+        geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::SPHERE>::value)
       x_extent = y_extent = z_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::SPHERE_RADIUS] * 2.0;
   }
   else if (shape_msg.type == shape_msgs::SolidPrimitive::BOX)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::BOX_X &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::BOX_Y &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::BOX_Z)
+    if (shape_msg.dimensions.size() >= geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value)
     {
       x_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::BOX_X];
       y_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::BOX_Y];
@@ -58,8 +58,8 @@ void geometric_shapes::getShapeExtents(const shape_msgs::SolidPrimitive& shape_m
   }
   else if (shape_msg.type == shape_msgs::SolidPrimitive::CYLINDER)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CYLINDER_RADIUS &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CYLINDER_HEIGHT)
+    if (shape_msg.dimensions.size() >=
+        geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CYLINDER>::value)
     {
       x_extent = y_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS] * 2.0;
       z_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT];
@@ -67,8 +67,8 @@ void geometric_shapes::getShapeExtents(const shape_msgs::SolidPrimitive& shape_m
   }
   else if (shape_msg.type == shape_msgs::SolidPrimitive::CONE)
   {
-    if (shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CONE_RADIUS &&
-        shape_msg.dimensions.size() > shape_msgs::SolidPrimitive::CONE_HEIGHT)
+    if (shape_msg.dimensions.size() >=
+        geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CONE>::value)
     {
       x_extent = y_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::CONE_RADIUS] * 2.0;
       z_extent = shape_msg.dimensions[shape_msgs::SolidPrimitive::CONE_HEIGHT];
@@ -80,26 +80,26 @@ void geometric_shapes::getShapeExtents(const shape_msgs::Mesh& shape_msg, double
                                        double& z_extent)
 {
   x_extent = y_extent = z_extent = 0.0;
-  if (shape_msg.vertices.size() > 0)
+  if (!shape_msg.vertices.empty())
   {
     double xmin = std::numeric_limits<double>::max(), ymin = std::numeric_limits<double>::max(),
            zmin = std::numeric_limits<double>::max();
     double xmax = -std::numeric_limits<double>::max(), ymax = -std::numeric_limits<double>::max(),
            zmax = -std::numeric_limits<double>::max();
-    for (std::size_t i = 0; i < shape_msg.vertices.size(); ++i)
+    for (const geometry_msgs::Point& vertex : shape_msg.vertices)
     {
-      if (shape_msg.vertices[i].x > xmax)
-        xmax = shape_msg.vertices[i].x;
-      if (shape_msg.vertices[i].x < xmin)
-        xmin = shape_msg.vertices[i].x;
-      if (shape_msg.vertices[i].y > ymax)
-        ymax = shape_msg.vertices[i].y;
-      if (shape_msg.vertices[i].y < ymin)
-        ymin = shape_msg.vertices[i].y;
-      if (shape_msg.vertices[i].z > zmax)
-        zmax = shape_msg.vertices[i].z;
-      if (shape_msg.vertices[i].z < zmin)
-        zmin = shape_msg.vertices[i].z;
+      if (vertex.x > xmax)
+        xmax = vertex.x;
+      if (vertex.x < xmin)
+        xmin = vertex.x;
+      if (vertex.y > ymax)
+        ymax = vertex.y;
+      if (vertex.y < ymin)
+        ymin = vertex.y;
+      if (vertex.z > zmax)
+        zmax = vertex.z;
+      if (vertex.z < zmin)
+        zmin = vertex.z;
     }
     x_extent = xmax - xmin;
     y_extent = ymax - ymin;

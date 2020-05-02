@@ -1,7 +1,7 @@
 /*********************************************************************
 * Software License Agreement (BSD License)
 *
-*  Copyright (c) 2008, Willow Garage, Inc.
+*  Copyright (c) 2019, Bielefeld University
 *  All rights reserved.
 *
 *  Redistribution and use in source and binary forms, with or without
@@ -14,7 +14,7 @@
 *     copyright notice, this list of conditions and the following
 *     disclaimer in the documentation and/or other materials provided
 *     with the distribution.
-*   * Neither the name of the Willow Garage nor the names of its
+*   * Neither the name of the Bielefeld University nor the names of its
 *     contributors may be used to endorse or promote products derived
 *     from this software without specific prior written permission.
 *
@@ -32,38 +32,31 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-/* Author: Ioan Sucan, E. Gil Jones */
+#include <geometric_shapes/bodies.h>
+#include <gtest/gtest.h>
 
-#ifndef GEOMETRIC_SHAPES_BODY_OPERATIONS_
-#define GEOMETRIC_SHAPES_BODY_OPERATIONS_
-
-#include "geometric_shapes/shapes.h"
-#include "geometric_shapes/bodies.h"
-#include "geometric_shapes/shape_messages.h"
-#include <geometry_msgs/Pose.h>
-#include <vector>
-
-namespace bodies
+TEST(Utils, checkIsometry)
 {
-/** \brief Create a body from a given shape */
-Body* createBodyFromShape(const shapes::Shape* shape);
+  Eigen::Isometry3d t(Eigen::AngleAxisd(0.42, Eigen::Vector3d(1, 1, 1).normalized()));
+  ASSERT_ISOMETRY(t);
 
-/** \brief Create a body from a given shape */
-Body* constructBodyFromMsg(const shape_msgs::Mesh& shape, const geometry_msgs::Pose& pose);
-
-/** \brief Create a body from a given shape */
-Body* constructBodyFromMsg(const shape_msgs::SolidPrimitive& shape, const geometry_msgs::Pose& pose);
-
-/** \brief Create a body from a given shape */
-Body* constructBodyFromMsg(const shapes::ShapeMsg& shape, const geometry_msgs::Pose& pose);
-
-/** \brief Compute a bounding sphere to enclose a set of bounding spheres */
-void mergeBoundingSpheres(const std::vector<BoundingSphere>& spheres, BoundingSphere& mergedSphere);
-
-/** \brief Compute an axis-aligned bounding box to enclose a set of bounding boxes. */
-void mergeBoundingBoxes(const std::vector<AABB>& boxes, AABB& mergedBox);
-
-/** \brief Compute the bounding sphere for a set of \e bodies and store the resulting sphere in \e mergedSphere */
-void computeBoundingSphere(const std::vector<const Body*>& bodies, BoundingSphere& mergedSphere);
-}  // namespace bodies
+  t.linear() = t.linear() * Eigen::DiagonalMatrix<double, 3, 3>(1.0, 2.0, 3.0);
+#ifdef NDEBUG
+  ASSERT_ISOMETRY(t)  // noop in release mode
+#else
+  ASSERT_DEATH(ASSERT_ISOMETRY(t), "Invalid isometry transform");
 #endif
+
+  t.matrix().row(3) = Eigen::Vector4d(1e-6, 1e-6, 1e-6, 1 - 1e-6);
+#ifdef NDEBUG
+  ASSERT_ISOMETRY(t)  // noop in release mode
+#else
+  ASSERT_DEATH(ASSERT_ISOMETRY(t), "Invalid isometry transform");
+#endif
+}
+
+int main(int argc, char** argv)
+{
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
