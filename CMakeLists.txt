@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0.2)
 project(geometric_shapes)
 
 add_compile_options(-std=c++11)
@@ -14,8 +14,15 @@ find_package(ASSIMP QUIET)
 if (NOT ASSIMP_FOUND)
   find_package(PkgConfig REQUIRED)
   # assimp is required, so REQUIRE the second attempt
-  pkg_check_modules(ASSIMP REQUIRED assimp)
+  pkg_check_modules(ASSIMP_PC REQUIRED assimp)
+  set(ASSIMP_INCLUDE_DIRS ${ASSIMP_PC_INCLUDE_DIRS})
 endif()
+
+# find *absolute* paths to ASSIMP_LIBRARIES
+# Both, pkg-config and assimp's cmake-config don't provide an absolute library path.
+# For, pkg-config the path is in ASSIMP_PC_LIBRARY_DIRS, for cmake in ASSIMP_LIBRARY_DIRS.
+find_library(ASSIMP_ABS_LIBRARIES NAMES ${ASSIMP_LIBRARIES} assimp HINTS ${ASSIMP_LIBRARY_DIRS} ${ASSIMP_PC_LIBRARY_DIRS})
+set(ASSIMP_LIBRARIES "${ASSIMP_ABS_LIBRARIES}")
 
 find_package(Boost REQUIRED system filesystem)
 
@@ -58,6 +65,7 @@ include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${ASSIMP_INCLUDE_
 include_directories(${catkin_INCLUDE_DIRS} ${console_bridge_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}
+  src/aabb.cpp
   src/bodies.cpp
   src/body_operations.cpp
   src/mesh_operations.cpp
@@ -77,7 +85,8 @@ endif()
 
 install(TARGETS ${PROJECT_NAME}
         ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
 
 install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

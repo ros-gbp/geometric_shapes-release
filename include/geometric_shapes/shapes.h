@@ -86,13 +86,13 @@ public:
   /** \brief Print information about this shape */
   virtual void print(std::ostream& out = std::cout) const;
 
-  /** \brief Scale this shape by a factor */
+  /** \brief Uniformly scale this shape by a factor */
   void scale(double scale);
 
-  /** \brief Add padding to this shape */
+  /** \brief Add uniform padding to this shape */
   void padd(double padding);
 
-  /** \brief Scale and padd this shape */
+  /** \brief Uniformly scale and padd this shape */
   virtual void scaleAndPadd(double scale, double padd) = 0;
 
   /** \brief Return a flag indicating whether this shape can be scaled and/or padded */
@@ -114,9 +114,9 @@ public:
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
+  void scaleAndPadd(double scale, double padd) override;
+  Sphere* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
 
   /** \brief The radius of the sphere */
   double radius;
@@ -127,6 +127,9 @@ public:
 class Cylinder : public Shape
 {
 public:
+  using Shape::padd;
+  using Shape::scale;
+
   Cylinder();
 
   /** \brief The radius and the length of the cylinder */
@@ -135,9 +138,32 @@ public:
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
+  /**
+   * \brief Scale this shape by a non-uniform factor.
+   * \param scaleRadius Radius scaling factor.
+   * \param scaleLength Cylinder length scaling factor.
+   */
+  void scale(double scaleRadius, double scaleLength);
+
+  /**
+   * \brief Add non-uniform padding to this shape.
+   * \param paddRadius Radius padding (in meters).
+   * \param paddLength Cylinder length padding (in meters).
+   */
+  void padd(double paddRadius, double paddLength);
+
+  /**
+   * \brief Scale this shape by a non-uniform factor and then add non-uniform padding.
+   * \param scaleRadius Radius scaling factor.
+   * \param scaleLength Cylinder length scaling factor.
+   * \param paddRadius Radius padding (in meters).
+   * \param paddLength Cylinder length padding (in meters).
+   */
+  void scaleAndPadd(double scaleRadius, double scaleLength, double paddRadius, double paddLength);
+
+  void scaleAndPadd(double scale, double padd) override;
+  Cylinder* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
 
   /** \brief The length of the cylinder */
   double length;
@@ -152,15 +178,41 @@ public:
 class Cone : public Shape
 {
 public:
+  using Shape::padd;
+  using Shape::scale;
+
   Cone();
   Cone(double r, double l);
 
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
+  /**
+   * \brief Scale this shape by a non-uniform factor.
+   * \param scaleRadius Radius scaling factor.
+   * \param scaleLength Cone length scaling factor.
+   */
+  void scale(double scaleRadius, double scaleLength);
+
+  /**
+   * \brief Add non-uniform padding to this shape.
+   * \param paddRadius Radius padding (in meters).
+   * \param paddLength Cone length padding (in meters).
+   */
+  void padd(double paddRadius, double paddLength);
+
+  /**
+   * \brief Scale this shape by a non-uniform factor and then add non-uniform padding.
+   * \param scaleRadius Radius scaling factor.
+   * \param scaleLength Cone length scaling factor.
+   * \param paddRadius Radius padding (in meters).
+   * \param paddLength Cone length padding (in meters).
+   */
+  void scaleAndPadd(double scaleRadius, double scaleLength, double paddRadius, double paddLength);
+
+  void scaleAndPadd(double scale, double padd) override;
+  Cone* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
 
   /** \brief The length (height) of the cone */
   double length;
@@ -174,15 +226,45 @@ public:
 class Box : public Shape
 {
 public:
+  using Shape::padd;
+  using Shape::scale;
+
   Box();
   Box(double x, double y, double z);
 
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
+  /**
+   * \brief Scale this shape by a non-uniform factor.
+   * \param scaleX Scale in x-dimension.
+   * \param scaleY Scale in y-dimension.
+   * \param scaleZ Scale in z-dimension.
+   */
+  void scale(double scaleX, double scaleY, double scaleZ);
+
+  /**
+   * \brief Add non-uniform padding to this shape.
+   * \param paddX Padding in x-dimension (in meters).
+   * \param paddY Padding in y-dimension (in meters).
+   * \param paddZ Padding in z-dimension (in meters).
+   */
+  void padd(double paddX, double paddY, double paddZ);
+
+  /**
+   * \brief Scale this shape by a non-uniform factor and then add non-uniform padding.
+   * \param scaleX Scale in x-dimension.
+   * \param scaleY Scale in y-dimension.
+   * \param scaleZ Scale in z-dimension.
+   * \param paddX Padding in x-dimension (in meters).
+   * \param paddY Padding in y-dimension (in meters).
+   * \param paddZ Padding in z-dimension (in meters).
+   */
+  void scaleAndPadd(double scaleX, double scaleY, double scaleZ, double paddX, double paddY, double paddZ);
+
+  void scaleAndPadd(double scale, double padd) override;
+  Box* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
 
   /** \brief x, y, z dimensions of the box (axis-aligned) */
   double size[3];
@@ -192,20 +274,59 @@ public:
  * By convention the "center" of the shape is at the origin.  For a mesh this
  * implies that the AABB of the mesh is centered at the origin.  Some methods
  * may not work with arbitrary meshes whose AABB is not centered at the origin.
+ * Padding is not applied to vertices plainly coordinate-wise, but instead the
+ * padding value is added to the length of the direction vector between centroid
+ * and each vertex.
  * */
 class Mesh : public Shape
 {
 public:
+  using Shape::padd;
+  using Shape::scale;
+
   Mesh();
   Mesh(unsigned int v_count, unsigned int t_count);
-  virtual ~Mesh();
+  ~Mesh() override;
 
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
+  /**
+   * \brief Scale this shape by a non-uniform factor.
+   * \param scaleX Scale in x-dimension.
+   * \param scaleY Scale in y-dimension.
+   * \param scaleZ Scale in z-dimension.
+   */
+  void scale(double scaleX, double scaleY, double scaleZ);
+
+  /**
+   * \brief Add non-uniform padding to this shape.
+   * \param paddX Padding in x-dimension (in meters).
+   * \param paddY Padding in y-dimension (in meters).
+   * \param paddZ Padding in z-dimension (in meters).
+   * \note Padding is not applied to vertices plainly coordinate-wise, but instead the
+   * padding value is added to the length of the direction vector between centroid
+   * and each vertex.
+   */
+  void padd(double paddX, double paddY, double paddZ);
+
+  /**
+   * \brief Scale this shape by a non-uniform factor and then add non-uniform padding.
+   * \param scaleX Scale in x-dimension.
+   * \param scaleY Scale in y-dimension.
+   * \param scaleZ Scale in z-dimension.
+   * \param paddX Padding in x-dimension (in meters).
+   * \param paddY Padding in y-dimension (in meters).
+   * \param paddZ Padding in z-dimension (in meters).
+   * \note Padding is not applied to vertices plainly coordinate-wise, but instead the
+   * padding value is added to the length of the direction vector between centroid
+   * and each vertex.
+   */
+  void scaleAndPadd(double scaleX, double scaleY, double scaleZ, double paddX, double paddY, double paddZ);
+
+  void scaleAndPadd(double scale, double padd) override;
+  Mesh* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
 
   /** \brief Compute the normals of each triangle from its vertices via cross product. */
   void computeTriangleNormals();
@@ -251,10 +372,10 @@ public:
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual bool isFixed() const;
+  Plane* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
+  void scaleAndPadd(double scale, double padd) override;
+  bool isFixed() const override;
 
   /** \brief The plane equation is ax + by + cz + d = 0 */
   double a, b, c, d;
@@ -270,10 +391,10 @@ public:
   /** \brief The type of the shape, as a string */
   static const std::string STRING_NAME;
 
-  virtual Shape* clone() const;
-  virtual void print(std::ostream& out = std::cout) const;
-  virtual void scaleAndPadd(double scale, double padd);
-  virtual bool isFixed() const;
+  OcTree* clone() const override;
+  void print(std::ostream& out = std::cout) const override;
+  void scaleAndPadd(double scale, double padd) override;
+  bool isFixed() const override;
 
   std::shared_ptr<const octomap::OcTree> octree;
 };
@@ -283,6 +404,6 @@ typedef std::shared_ptr<Shape> ShapePtr;
 
 /** \brief Shared pointer to a const Shape */
 typedef std::shared_ptr<const Shape> ShapeConstPtr;
-}
+}  // namespace shapes
 
 #endif
