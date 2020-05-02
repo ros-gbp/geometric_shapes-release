@@ -43,13 +43,13 @@ namespace
 {
 void assertMesh(shapes::Mesh* mesh)
 {
-  ASSERT_TRUE(mesh != NULL);
-  ASSERT_EQ(3, mesh->vertex_count);
-  ASSERT_EQ(1, mesh->triangle_count);
+  ASSERT_TRUE(mesh != nullptr);
+  ASSERT_EQ(3u, mesh->vertex_count);
+  ASSERT_EQ(1u, mesh->triangle_count);
 
-  ASSERT_EQ(0, mesh->triangles[0]);
-  ASSERT_EQ(1, mesh->triangles[1]);
-  ASSERT_EQ(2, mesh->triangles[2]);
+  ASSERT_EQ(0u, mesh->triangles[0]);
+  ASSERT_EQ(1u, mesh->triangles[1]);
+  ASSERT_EQ(2u, mesh->triangles[2]);
 
   ASSERT_FLOAT_EQ(0, mesh->vertices[0 + 0]);
   ASSERT_FLOAT_EQ(0, mesh->vertices[0 + 1]);
@@ -67,7 +67,7 @@ shapes::Mesh* loadMesh(const std::string& mesh)
   std::string path = "file://" + std::string(TEST_RESOURCES_DIR) + "/" + mesh;
   return shapes::createMeshFromResource(path);
 }
-}
+}  // namespace
 
 TEST(CreateMesh, stl)
 {
