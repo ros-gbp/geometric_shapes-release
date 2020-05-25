@@ -93,12 +93,10 @@ public:
     pose_.setIdentity();
   }
 
-  virtual ~Body()
-  {
-  }
+  virtual ~Body() = default;
 
   /** \brief Get the type of shape this body represents */
-  shapes::ShapeType getType() const
+  inline shapes::ShapeType getType() const
   {
     return type_;
   }
@@ -111,21 +109,21 @@ public:
    *       internal structures after each call. When you are finished with the batch, call updateInternalData().
    * \param scale The scale to set. 1.0 means no scaling.
    */
-  void setScaleDirty(double scale)
+  inline void setScaleDirty(double scale)
   {
     scale_ = scale;
   }
 
   /** \brief If the dimension of the body should be scaled, this
       method sets the scale. Default is 1.0 */
-  void setScale(double scale)
+  inline void setScale(double scale)
   {
     setScaleDirty(scale);
     updateInternalData();
   }
 
   /** \brief Retrieve the current scale */
-  double getScale() const
+  inline double getScale() const
   {
     return scale_;
   }
@@ -138,21 +136,21 @@ public:
    *       internal structures after each call. When you are finished with the batch, call updateInternalData().
    * \param padd The padding to set (in meters). 0.0 means no padding.
    */
-  void setPaddingDirty(double padd)
+  inline void setPaddingDirty(double padd)
   {
     padding_ = padd;
   }
 
   /** \brief If constant padding should be added to the body, this
       method sets the padding. Default is 0.0 */
-  void setPadding(double padd)
+  inline void setPadding(double padd)
   {
     setPaddingDirty(padd);
     updateInternalData();
   }
 
   /** \brief Retrieve the current padding */
-  double getPadding() const
+  inline double getPadding() const
   {
     return padding_;
   }
@@ -165,20 +163,20 @@ public:
    *       internal structures after each call. When you are finished with the batch, call updateInternalData().
    * \param pose The pose to set. Default is identity.
    */
-  void setPoseDirty(const Eigen::Isometry3d& pose)
+  inline void setPoseDirty(const Eigen::Isometry3d& pose)
   {
     pose_ = pose;
   }
 
   /** \brief Set the pose of the body. Default is identity */
-  void setPose(const Eigen::Isometry3d& pose)
+  inline void setPose(const Eigen::Isometry3d& pose)
   {
     setPoseDirty(pose);
     updateInternalData();
   }
 
   /** \brief Retrieve the pose of the body */
-  const Eigen::Isometry3d& getPose() const
+  inline const Eigen::Isometry3d& getPose() const
   {
     return pose_;
   }
@@ -199,11 +197,18 @@ public:
   /** \brief Get the dimensions associated to this body (as read from corresponding shape) */
   virtual std::vector<double> getDimensions() const = 0;
 
+  /** \brief Get the dimensions associated to this body (scaled and padded) */
+  virtual std::vector<double> getScaledDimensions() const = 0;
+
   /** \brief Set the dimensions of the body (from corresponding shape) */
-  void setDimensions(const shapes::Shape* shape);
+  inline void setDimensions(const shapes::Shape* shape)
+  {
+    setDimensionsDirty(shape);
+    updateInternalData();
+  }
 
   /** \brief Check if a point is inside the body */
-  bool containsPoint(double x, double y, double z, bool verbose = false) const
+  inline bool containsPoint(double x, double y, double z, bool verbose = false) const
   {
     Eigen::Vector3d pt(x, y, z);
     return containsPoint(pt, verbose);
@@ -245,7 +250,7 @@ public:
   virtual void computeBoundingBox(AABB& bbox) const = 0;
 
   /** \brief Get a clone of this body, but one that is located at the pose \e pose */
-  BodyPtr cloneAt(const Eigen::Isometry3d& pose) const
+  inline BodyPtr cloneAt(const Eigen::Isometry3d& pose) const
   {
     return cloneAt(pose, padding_, scale_);
   }
@@ -296,23 +301,13 @@ public:
     setDimensions(shape);
   }
 
-  explicit Sphere(const BoundingSphere& sphere) : Body()
-  {
-    type_ = shapes::SPHERE;
-    shapes::Sphere shape(sphere.radius);
-    setDimensionsDirty(&shape);
+  explicit Sphere(const BoundingSphere& sphere);
 
-    Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
-    pose.translation() = sphere.center;
-    setPose(pose);
-  }
-
-  ~Sphere() override
-  {
-  }
+  ~Sphere() override = default;
 
   /** \brief Get the radius of the sphere */
   std::vector<double> getDimensions() const override;
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -358,20 +353,13 @@ public:
     setDimensions(shape);
   }
 
-  explicit Cylinder(const BoundingCylinder& cylinder) : Body()
-  {
-    type_ = shapes::CYLINDER;
-    shapes::Cylinder shape(cylinder.radius, cylinder.length);
-    setDimensionsDirty(&shape);
-    setPose(cylinder.pose);
-  }
+  explicit Cylinder(const BoundingCylinder& cylinder);
 
-  ~Cylinder() override
-  {
-  }
+  ~Cylinder() override = default;
 
   /** \brief Get the radius & length of the cylinder */
   std::vector<double> getDimensions() const override;
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -427,23 +415,13 @@ public:
     setDimensions(shape);
   }
 
-  explicit Box(const AABB& aabb) : Body()
-  {
-    type_ = shapes::BOX;
-    shapes::Box shape(aabb.sizes()[0], aabb.sizes()[1], aabb.sizes()[2]);
-    setDimensionsDirty(&shape);
+  explicit Box(const AABB& aabb);
 
-    Eigen::Isometry3d pose = Eigen::Isometry3d::Identity();
-    pose.translation() = aabb.center();
-    setPose(pose);
-  }
-
-  ~Box() override
-  {
-  }
+  ~Box() override = default;
 
   /** \brief Get the length & width & height (x, y, z) of the box */
   std::vector<double> getDimensions() const override;
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -469,12 +447,10 @@ protected:
 
   // pose/padding/scaling-dependent values & values computed for convenience and fast upcoming computations
   Eigen::Vector3d center_;
-  Eigen::Vector3d normalL_;
-  Eigen::Vector3d normalW_;
-  Eigen::Vector3d normalH_;
+  Eigen::Matrix3d invRot_;
 
-  Eigen::Vector3d corner1_;  //!< The translated, but not rotated min corner
-  Eigen::Vector3d corner2_;  //!< The translated, but not rotated max corner
+  Eigen::Vector3d minCorner_;  //!< The translated, but not rotated min corner
+  Eigen::Vector3d maxCorner_;  //!< The translated, but not rotated max corner
 
   double length2_;
   double width2_;
@@ -503,10 +479,12 @@ public:
     setDimensions(shape);
   }
 
-  ~ConvexMesh() override;
+  ~ConvexMesh() override = default;
 
   /** \brief Returns an empty vector */
   std::vector<double> getDimensions() const override;
+  /** \brief Returns an empty vector */
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -550,20 +528,8 @@ protected:
    */
   bool isPointInsidePlanes(const Eigen::Vector3d& point) const;
 
-  struct MeshData
-  {
-    EigenSTL::vector_Vector4d planes_;
-    EigenSTL::vector_Vector3d vertices_;
-    std::vector<unsigned int> triangles_;
-    std::map<unsigned int, unsigned int> plane_for_triangle_;
-    Eigen::Vector3d mesh_center_;
-    double mesh_radiusB_;
-    Eigen::Vector3d box_offset_;
-    Eigen::Vector3d box_size_;
-    BoundingCylinder bounding_cylinder_;
-
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-  };
+  // PIMPL structure
+  struct MeshData;
 
   // shape-dependent data; keep this in one struct so that a cheap pointer copy can be done in cloneAt()
   std::shared_ptr<MeshData> mesh_data_;
