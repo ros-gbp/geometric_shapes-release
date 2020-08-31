@@ -56,13 +56,11 @@ catkin_package(
   )
 
 find_package(Qhull REQUIRED)
-if (HAVE_QHULL_2011)
-  add_definitions(-DGEOMETRIC_SHAPES_HAVE_QHULL_2011)
-endif()
 
 include_directories(include)
-include_directories(${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${OCTOMAP_INCLUDE_DIRS})
-include_directories(${catkin_INCLUDE_DIRS} ${console_bridge_INCLUDE_DIRS})
+include_directories(SYSTEM
+  ${EIGEN3_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${OCTOMAP_INCLUDE_DIRS}
+  ${QHULL_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS} ${console_bridge_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}
   src/aabb.cpp
@@ -74,6 +72,7 @@ add_library(${PROJECT_NAME}
   src/shape_to_marker.cpp
   src/shapes.cpp
 )
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION})
 
 target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES} ${QHULL_LIBRARIES} ${catkin_LIBRARIES} ${console_bridge_LIBRARIES} ${Boost_LIBRARIES})
 
