@@ -1,36 +1,36 @@
 /*********************************************************************
-* Software License Agreement (BSD License)
-*
-*  Copyright (c) 2019, Open Robotics
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions
-*  are met:
-*
-*   * Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-*   * Redistributions in binary form must reproduce the above
-*     copyright notice, this list of conditions and the following
-*     disclaimer in the documentation and/or other materials provided
-*     with the distribution.
-*   * Neither the name of the Willow Garage nor the names of its
-*     contributors may be used to endorse or promote products derived
-*     from this software without specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-*  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-*  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-*  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-*  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*********************************************************************/
+ * Software License Agreement (BSD License)
+ *
+ *  Copyright (c) 2019, Open Robotics
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above
+ *     copyright notice, this list of conditions and the following
+ *     disclaimer in the documentation and/or other materials provided
+ *     with the distribution.
+ *   * Neither the name of the Willow Garage nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *********************************************************************/
 
 /** \Author Ioan Sucan */
 /** \Author Martin Pecka */
@@ -188,9 +188,9 @@ TEST(SphereRayIntersection, OriginInside)
   const auto sq3 = sqrt(pow(1 + 0.1, 2) / 3);
   const auto dir3 = Eigen::Vector3d::Ones().normalized();
   // clang-format off
-  CHECK_INTERSECTS_ONCE(sphere, (   0,    0,    0), ( dir3), ( sq3,  sq3,  sq3), 1e-4)
-  CHECK_INTERSECTS_ONCE(sphere, ( 0.5,  0.5,  0.5), ( dir3), ( sq3,  sq3,  sq3), 1e-4)
-  CHECK_INTERSECTS_ONCE(sphere, (-0.5, -0.5, -0.5), ( dir3), ( sq3,  sq3,  sq3), 1e-4)
+  CHECK_INTERSECTS_ONCE(sphere, (   0,    0,    0), ( dir3), ( sq3,  sq3,  sq3), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(sphere, ( 0.5,  0.5,  0.5), ( dir3), ( sq3,  sq3,  sq3), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(sphere, (-0.5, -0.5, -0.5), ( dir3), ( sq3,  sq3,  sq3), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
   CHECK_INTERSECTS_ONCE(sphere, (   0,    0,    0), (-dir3), (-sq3, -sq3, -sq3), 1e-4)
   CHECK_INTERSECTS_ONCE(sphere, ( 0.5,  0.5,  0.5), (-dir3), (-sq3, -sq3, -sq3), 1e-4)
   CHECK_INTERSECTS_ONCE(sphere, (-0.5, -0.5, -0.5), (-dir3), (-sq3, -sq3, -sq3), 1e-4)
@@ -348,7 +348,7 @@ TEST(SphereRayIntersection, OriginOutside)
     }
 
     // check that the opposite ray misses
-    CHECK_NO_INTERSECTION(sphere, (origin), (-dir))
+    CHECK_NO_INTERSECTION(sphere, (origin), (-dir))  // NOLINT(performance-unnecessary-copy-initialization)
 
     // shift the ray a bit sideways
 
@@ -473,9 +473,9 @@ TEST(CylinderRayIntersection, OriginInside)
   // direction towards the very "corner" of the cylinder
   const auto dir3 = Eigen::Vector3d({ sq2, sq2, 1.1 }).normalized();
   // clang-format off
-  CHECK_INTERSECTS_ONCE(cylinder, ( 0,  0,  0), ( dir3), ( sq2,  sq2,  1.1), 1e-4)
-  CHECK_INTERSECTS_ONCE(cylinder, (  dir3 / 2), ( dir3), ( sq2,  sq2,  1.1), 1e-4)
-  CHECK_INTERSECTS_ONCE(cylinder, ( -dir3 / 2), ( dir3), ( sq2,  sq2,  1.1), 1e-4)
+  CHECK_INTERSECTS_ONCE(cylinder, ( 0,  0,  0), ( dir3), ( sq2,  sq2,  1.1), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(cylinder, (  dir3 / 2), ( dir3), ( sq2,  sq2,  1.1), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(cylinder, ( -dir3 / 2), ( dir3), ( sq2,  sq2,  1.1), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
   CHECK_INTERSECTS_ONCE(cylinder, ( 0,  0,  0), (-dir3), (-sq2, -sq2, -1.1), 1e-4)
   CHECK_INTERSECTS_ONCE(cylinder, (  dir3 / 2), (-dir3), (-sq2, -sq2, -1.1), 1e-4)
   CHECK_INTERSECTS_ONCE(cylinder, ( -dir3 / 2), (-dir3), (-sq2, -sq2, -1.1), 1e-4)
@@ -639,7 +639,7 @@ TEST(CylinderRayIntersection, OriginOutside)
     }
 
     // check that the opposite ray misses
-    CHECK_NO_INTERSECTION(cylinder, (origin), (-dir))
+    CHECK_NO_INTERSECTION(cylinder, (origin), (-dir))  // NOLINT(performance-unnecessary-copy-initialization)
 
     // shift the ray a bit sideways
 
@@ -818,9 +818,9 @@ TEST(BoxRayIntersection, OriginInside)
 
   const auto dir3 = Eigen::Vector3d::Ones().normalized();
   // clang-format off
-  CHECK_INTERSECTS_ONCE(box, (   0,    0,    0), ( dir3), ( 1.1,  1.1,  1.1), 1e-4)
-  CHECK_INTERSECTS_ONCE(box, ( 0.5,  0.5,  0.5), ( dir3), ( 1.1,  1.1,  1.1), 1e-4)
-  CHECK_INTERSECTS_ONCE(box, (-0.5, -0.5, -0.5), ( dir3), ( 1.1,  1.1,  1.1), 1e-4)
+  CHECK_INTERSECTS_ONCE(box, (   0,    0,    0), ( dir3), ( 1.1,  1.1,  1.1), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(box, ( 0.5,  0.5,  0.5), ( dir3), ( 1.1,  1.1,  1.1), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(box, (-0.5, -0.5, -0.5), ( dir3), ( 1.1,  1.1,  1.1), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
   CHECK_INTERSECTS_ONCE(box, (   0,    0,    0), (-dir3), (-1.1, -1.1, -1.1), 1e-4)
   CHECK_INTERSECTS_ONCE(box, ( 0.5,  0.5,  0.5), (-dir3), (-1.1, -1.1, -1.1), 1e-4)
   CHECK_INTERSECTS_ONCE(box, (-0.5, -0.5, -0.5), (-dir3), (-1.1, -1.1, -1.1), 1e-4)
@@ -996,7 +996,7 @@ TEST(BoxRayIntersection, OriginOutsideIntersects)
     }
 
     // check that the opposite ray misses
-    CHECK_NO_INTERSECTION(box, (origin), (-dir))
+    CHECK_NO_INTERSECTION(box, (origin), (-dir))  // NOLINT(performance-unnecessary-copy-initialization)
 
     // shift the ray a bit sideways
 
@@ -1151,9 +1151,9 @@ TEST(ConvexMeshRayIntersection, OriginInside)
 
   const auto dir3 = Eigen::Vector3d::Ones().normalized();
   // clang-format off
-  CHECK_INTERSECTS_ONCE(mesh, (   0,    0,    0), ( dir3), ( s,  s,  s), 1e-4)
-  CHECK_INTERSECTS_ONCE(mesh, ( 0.5,  0.5,  0.5), ( dir3), ( s,  s,  s), 1e-4)
-  CHECK_INTERSECTS_ONCE(mesh, (-0.5, -0.5, -0.5), ( dir3), ( s,  s,  s), 1e-4)
+  CHECK_INTERSECTS_ONCE(mesh, (   0,    0,    0), ( dir3), ( s,  s,  s), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(mesh, ( 0.5,  0.5,  0.5), ( dir3), ( s,  s,  s), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
+  CHECK_INTERSECTS_ONCE(mesh, (-0.5, -0.5, -0.5), ( dir3), ( s,  s,  s), 1e-4) // NOLINT(performance-unnecessary-copy-initialization)
   CHECK_INTERSECTS_ONCE(mesh, (   0,    0,    0), (-dir3), (-s, -s, -s), 1e-4)
   CHECK_INTERSECTS_ONCE(mesh, ( 0.5,  0.5,  0.5), (-dir3), (-s, -s, -s), 1e-4)
   CHECK_INTERSECTS_ONCE(mesh, (-0.5, -0.5, -0.5), (-dir3), (-s, -s, -s), 1e-4)
@@ -1331,7 +1331,7 @@ TEST(ConvexMeshRayIntersection, OriginOutsideIntersects)
     }
 
     // check that the opposite ray misses
-    CHECK_NO_INTERSECTION(mesh, (origin), (-dir))
+    CHECK_NO_INTERSECTION(mesh, (origin), (-dir))  // NOLINT(performance-unnecessary-copy-initialization)
 
     // shift the ray a bit sideways
 
