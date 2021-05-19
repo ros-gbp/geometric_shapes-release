@@ -1,36 +1,36 @@
 /*********************************************************************
-* Software License Agreement (BSD License)
-*
-*  Copyright (c) 2008, Willow Garage, Inc.
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions
-*  are met:
-*
-*   * Redistributions of source code must retain the above copyright
-*     notice, this list of conditions and the following disclaimer.
-*   * Redistributions in binary form must reproduce the above
-*     copyright notice, this list of conditions and the following
-*     disclaimer in the documentation and/or other materials provided
-*     with the distribution.
-*   * Neither the name of the Willow Garage nor the names of its
-*     contributors may be used to endorse or promote products derived
-*     from this software without specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-*  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-*  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-*  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-*  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-*  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-*  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-*  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-*  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-*  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*********************************************************************/
+ * Software License Agreement (BSD License)
+ *
+ *  Copyright (c) 2008, Willow Garage, Inc.
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions
+ *  are met:
+ *
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above
+ *     copyright notice, this list of conditions and the following
+ *     disclaimer in the documentation and/or other materials provided
+ *     with the distribution.
+ *   * Neither the name of the Willow Garage nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+ *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+ *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+ *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *********************************************************************/
 
 /* Author: Ioan Sucan */
 
@@ -209,7 +209,7 @@ void bodies::Sphere::updateInternalData()
 
 std::shared_ptr<bodies::Body> bodies::Sphere::cloneAt(const Eigen::Isometry3d& pose, double padding, double scale) const
 {
-  auto s = std::make_shared<Sphere>();
+  auto s = std::allocate_shared<Sphere>(Eigen::aligned_allocator<Sphere>());
   s->radius_ = radius_;
   s->padding_ = padding;
   s->scale_ = scale;
@@ -410,7 +410,7 @@ bool bodies::Cylinder::samplePointInside(random_numbers::RandomNumberGenerator& 
 std::shared_ptr<bodies::Body> bodies::Cylinder::cloneAt(const Eigen::Isometry3d& pose, double padding,
                                                         double scale) const
 {
-  auto c = std::make_shared<Cylinder>();
+  auto c = std::allocate_shared<Cylinder>(Eigen::aligned_allocator<Cylinder>());
   c->length_ = length_;
   c->radius_ = radius_;
   c->padding_ = padding;
@@ -625,7 +625,7 @@ void bodies::Box::updateInternalData()
 
 std::shared_ptr<bodies::Body> bodies::Box::cloneAt(const Eigen::Isometry3d& pose, double padding, double scale) const
 {
-  auto b = std::make_shared<Box>();
+  auto b = std::allocate_shared<Box>(Eigen::aligned_allocator<Box>());
   b->length_ = length_;
   b->width_ = width_;
   b->height_ = height_;
@@ -798,7 +798,7 @@ void bodies::ConvexMesh::correctVertexOrderFromPlanes()
 
 void bodies::ConvexMesh::useDimensions(const shapes::Shape* shape)
 {
-  mesh_data_ = std::make_shared<MeshData>();
+  mesh_data_ = std::allocate_shared<MeshData>(Eigen::aligned_allocator<MeshData>());
   const shapes::Mesh* mesh = static_cast<const shapes::Mesh*>(shape);
 
   double maxX = -std::numeric_limits<double>::infinity(), maxY = -std::numeric_limits<double>::infinity(),
@@ -1110,7 +1110,7 @@ const EigenSTL::vector_Vector4d& bodies::ConvexMesh::getPlanes() const
 std::shared_ptr<bodies::Body> bodies::ConvexMesh::cloneAt(const Eigen::Isometry3d& pose, double padding,
                                                           double scale) const
 {
-  auto m = std::make_shared<ConvexMesh>();
+  auto m = std::allocate_shared<ConvexMesh>(Eigen::aligned_allocator<ConvexMesh>());
   m->mesh_data_ = mesh_data_;
   m->padding_ = padding;
   m->scale_ = scale;
