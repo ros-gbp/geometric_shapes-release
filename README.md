@@ -1,3 +1,26 @@
+## geometric_shapes (melodic) - 0.6.5-1
+
+The packages in the `geometric_shapes` repository were released into the `melodic` distro by running `/usr/bin/bloom-release --ros-distro melodic geometric_shapes` on `Fri, 31 Mar 2023 09:20:07 -0000`
+
+The `geometric_shapes` package was released.
+
+Version of package(s) in repository `geometric_shapes`:
+
+- upstream repository: https://github.com/ros-planning/geometric_shapes.git
+- release repository: https://github.com/ros-gbp/geometric_shapes-release.git
+- rosdistro version: `0.6.4-1`
+- old version: `0.6.4-1`
+- new version: `0.6.5-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## geometric_shapes (noetic) - 0.7.3-1
 
 The packages in the `geometric_shapes` repository were released into the `noetic` distro by running `/usr/bin/bloom-release --ros-distro noetic geometric_shapes` on `Wed, 19 May 2021 09:58:27 -0000`
