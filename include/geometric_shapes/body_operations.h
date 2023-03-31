@@ -41,6 +41,7 @@
 #include "geometric_shapes/bodies.h"
 #include "geometric_shapes/shape_messages.h"
 #include <geometry_msgs/Pose.h>
+#include <visualization_msgs/Marker.h>
 #include <vector>
 
 namespace bodies
@@ -60,11 +61,20 @@ Body* constructBodyFromMsg(const shape_msgs::SolidPrimitive& shape, const geomet
 /** \brief Create a body from a given shape */
 Body* constructBodyFromMsg(const shapes::ShapeMsg& shape, const geometry_msgs::Pose& pose);
 
+/** \brief Get a shape that corresponds to this (scaled and padded) body. */
+shapes::ShapeConstPtr constructShapeFromBody(const bodies::Body* body);
+
+/** \brief Construct a Marker message that corresponds to this (scaled and padded) body. */
+void constructMarkerFromBody(const bodies::Body* body, visualization_msgs::Marker& msg);
+
 /** \brief Compute a bounding sphere to enclose a set of bounding spheres */
 void mergeBoundingSpheres(const std::vector<BoundingSphere>& spheres, BoundingSphere& mergedSphere);
 
 /** \brief Compute an axis-aligned bounding box to enclose a set of bounding boxes. */
 void mergeBoundingBoxes(const std::vector<AABB>& boxes, AABB& mergedBox);
+
+/** \brief Compute an approximate oriented bounding box to enclose a set of bounding boxes. */
+void mergeBoundingBoxesApprox(const std::vector<OBB>& boxes, OBB& mergedBox);
 
 /** \brief Compute the bounding sphere for a set of \e bodies and store the resulting sphere in \e mergedSphere */
 void computeBoundingSphere(const std::vector<const Body*>& bodies, BoundingSphere& mergedSphere);
