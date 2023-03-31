@@ -16,7 +16,7 @@ set(PROJECT_COMPILE_OPTIONS
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/")
 
-if (NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   message("${PROJECT_NAME}: You did not request a specific build type: Choosing 'Release' for maximum performance")
   set(CMAKE_BUILD_TYPE Release)
 endif()
@@ -80,10 +80,7 @@ catkin_package(
     console_bridge
   )
 
-find_package(Qhull REQUIRED)
-if (HAVE_QHULL_2011)
-  add_definitions(-DGEOMETRIC_SHAPES_HAVE_QHULL_2011)
-endif()
+find_package(QHULL REQUIRED)
 
 include_directories(include)
 include_directories(SYSTEM
@@ -102,6 +99,7 @@ add_library(${PROJECT_NAME}
   src/shapes.cpp
 )
 target_compile_options(${PROJECT_NAME} PRIVATE ${PROJECT_COMPILE_OPTIONS})
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION})
 
 target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES} ${QHULL_LIBRARIES} ${catkin_LIBRARIES} ${console_bridge_LIBRARIES} ${Boost_LIBRARIES} ${LIBFCL_LIBRARIES})
 

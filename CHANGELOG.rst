@@ -2,21 +2,44 @@
 Changelog for package geometric_shapes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.6.5 (2023-03-31)
+0.7.4 (2023-03-31)
 ------------------
-* Add bodies::Body::computeBoundingBox (oriented box version) (`#210 <https://github.com/ros-planning/geometric_shapes/issues/210>`_)
+* Body::getScaledDimensions(): avoid vtable lookup (`#225 <https://github.com/ros-planning/geometric_shapes/issues/225>`_)
+* Add Body::computeBoundingBox (oriented box version) (`#210 <https://github.com/ros-planning/geometric_shapes/issues/210>`_)
 
   This adds the dependency on FCL, provide support for FCL 0.6 if available
-* Add body operations constructShapeFromBody() and constructMarkerFromBody() (`#209 <https://github.com/ros-planning/geometric_shapes/issues/209>`_)
-* Eigen < 3.3.0 needs explicit cast (`#224 <https://github.com/ros-planning/geometric_shapes/issues/224>`_)
-* Contributors: Kei Okada, Martin Pecka, Robert Haschke
+* Contributors: Martin Pecka, Robert Haschke
 
-0.6.4 (2021-05-19)
+0.7.3 (2021-05-19)
 ------------------
 * [fix]   Fix memory leak (`#168 <https://github.com/ros-planning/geometric_shapes/issues/168>`_)
 * [fix]   Use proper Eigen alignment for make_shared calls (`#187 <https://github.com/ros-planning/geometric_shapes/issues/187>`_)
-* [maint] Migrate from Travis to GitHub actions (`#172 <https://github.com/ros-planning/geometric_shapes/issues/172>`_)
-* Contributors: Dave Coleman, Martin Pecka, Robert Haschke, Tyler Weaver
+* [maint] Migrate from Travis to GitHub Actions (`#171 <https://github.com/ros-planning/geometric_shapes/issues/171>`_)
+* Contributors: Robert Haschke, Tyler Weaver
+
+0.7.2 (2020-09-25)
+------------------
+* [maint] Renamed SolidPrimitiveDimCount<shape>::value -> solidPrimitiveDimCount<shape>() (`#121 <https://github.com/ros-planning/geometric_shapes/issues/121>`_)
+* [maint] cmake: Consistently use uppercase letters for QHULL dependency
+* [maint] cmake: Fix assimp warning
+* [maint] Update build badges for Noetic
+* Contributors: Robert Haschke
+
+0.7.1 (2020-08-31)
+------------------
+* [maint] Declare external includes as SYSTEM includes
+* [maint] Migration to reentrant qhull (`#149 <https://github.com/ros-planning/geometric_shapes/issues/149>`_)
+* [maint] Use soname version for library (`#157 <https://github.com/ros-planning/geometric_shapes/issues/157>`_)
+* Contributors: Jochen Sprickerhof, Robert Haschke, Tyler Weaver
+
+0.7.0 (2020-05-25)
+------------------
+* [feature] Added constructShapeFromBody() and constructMarkerFromBody() (`#138 <https://github.com/ros-planning/geometric_shapes/issues/138>`_)
+* [maint]   API cleanup
+  * Improve inlining
+  * ConvexMesh::MeshData as pimpl
+  * Reverted ABI compatibility fixups for Melodic: ed4cf1339cf3765ae9ffa6e6fd111a4e342c5fa2, d582479084a10cac53a7f17e29818b3d8be6161e
+* Contributors: Martin Pecka, Robert Haschke
 
 0.6.3 (2020-05-25)
 ------------------
