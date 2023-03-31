@@ -42,6 +42,7 @@
 #endif
 
 #include "geometric_shapes/aabb.h"
+#include "geometric_shapes/obb.h"
 #include "geometric_shapes/shapes.h"
 #include <eigen_stl_containers/eigen_stl_containers.h>
 #include <random_numbers/random_numbers.h>
@@ -199,6 +200,9 @@ public:
   /** \brief Get the dimensions associated to this body (as read from corresponding shape) */
   virtual std::vector<double> getDimensions() const = 0;
 
+  /** \brief Get the dimensions associated to this body (scaled and padded) */
+  virtual std::vector<double> getScaledDimensions() const = 0;
+
   /** \brief Set the dimensions of the body (from corresponding shape) */
   void setDimensions(const shapes::Shape* shape);
 
@@ -243,6 +247,10 @@ public:
   /** \brief Compute the axis-aligned bounding box for the body, in its current
       pose. Scaling and padding are accounted for. */
   virtual void computeBoundingBox(AABB& bbox) const = 0;
+
+  /** \brief Compute the oriented bounding box for the body, in its current
+      pose. Scaling and padding are accounted for. */
+  virtual void computeBoundingBox(OBB& bbox) const = 0;
 
   /** \brief Get a clone of this body, but one that is located at the pose \e pose */
   BodyPtr cloneAt(const Eigen::Isometry3d& pose) const
@@ -313,6 +321,7 @@ public:
 
   /** \brief Get the radius of the sphere */
   std::vector<double> getDimensions() const override;
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -321,6 +330,7 @@ public:
   void computeBoundingSphere(BoundingSphere& sphere) const override;
   void computeBoundingCylinder(BoundingCylinder& cylinder) const override;
   void computeBoundingBox(AABB& bbox) const override;
+  void computeBoundingBox(OBB& bbox) const override;
   bool intersectsRay(const Eigen::Vector3d& origin, const Eigen::Vector3d& dir,
                      EigenSTL::vector_Vector3d* intersections = nullptr, unsigned int count = 0) const override;
 
@@ -372,6 +382,7 @@ public:
 
   /** \brief Get the radius & length of the cylinder */
   std::vector<double> getDimensions() const override;
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -380,6 +391,7 @@ public:
   void computeBoundingSphere(BoundingSphere& sphere) const override;
   void computeBoundingCylinder(BoundingCylinder& cylinder) const override;
   void computeBoundingBox(AABB& bbox) const override;
+  void computeBoundingBox(OBB& bbox) const override;
   bool intersectsRay(const Eigen::Vector3d& origin, const Eigen::Vector3d& dir,
                      EigenSTL::vector_Vector3d* intersections = nullptr, unsigned int count = 0) const override;
 
@@ -444,6 +456,7 @@ public:
 
   /** \brief Get the length & width & height (x, y, z) of the box */
   std::vector<double> getDimensions() const override;
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -452,6 +465,7 @@ public:
   void computeBoundingSphere(BoundingSphere& sphere) const override;
   void computeBoundingCylinder(BoundingCylinder& cylinder) const override;
   void computeBoundingBox(AABB& bbox) const override;
+  void computeBoundingBox(OBB& bbox) const override;
   bool intersectsRay(const Eigen::Vector3d& origin, const Eigen::Vector3d& dir,
                      EigenSTL::vector_Vector3d* intersections = nullptr, unsigned int count = 0) const override;
 
@@ -507,6 +521,8 @@ public:
 
   /** \brief Returns an empty vector */
   std::vector<double> getDimensions() const override;
+  /** \brief Returns an empty vector */
+  std::vector<double> getScaledDimensions() const override;
 
   bool containsPoint(const Eigen::Vector3d& p, bool verbose = false) const override;
   double computeVolume() const override;
@@ -514,6 +530,7 @@ public:
   void computeBoundingSphere(BoundingSphere& sphere) const override;
   void computeBoundingCylinder(BoundingCylinder& cylinder) const override;
   void computeBoundingBox(AABB& bbox) const override;
+  void computeBoundingBox(OBB& bbox) const override;
   bool intersectsRay(const Eigen::Vector3d& origin, const Eigen::Vector3d& dir,
                      EigenSTL::vector_Vector3d* intersections = nullptr, unsigned int count = 0) const override;
 

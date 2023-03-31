@@ -154,7 +154,7 @@ inline Eigen::Vector3d normalize(const Eigen::Vector3d& dir)
 #if EIGEN_VERSION_AT_LEAST(3, 3, 0)
   return ((norm - 1) > 1e-9) ? (dir / Eigen::numext::sqrt(norm)) : dir;
 #else  // used in kinetic
-  return ((norm - 1) > 1e-9) ? (dir / sqrt(norm)) : dir;
+  return ((norm - 1) > 1e-9) ? (Eigen::Vector3d)(dir / sqrt(norm)) : dir;
 #endif
 }
 }  // namespace bodies
@@ -193,8 +193,12 @@ void bodies::Sphere::useDimensions(const shapes::Shape* shape)  // radius
 
 std::vector<double> bodies::Sphere::getDimensions() const
 {
-  std::vector<double> d(1, radius_);
-  return d;
+  return { radius_ };
+}
+
+std::vector<double> bodies::Sphere::getScaledDimensions() const
+{
+  return { radiusU_ };
 }
 
 void bodies::Sphere::updateInternalData()
@@ -245,6 +249,15 @@ void bodies::Sphere::computeBoundingBox(bodies::AABB& bbox) const
   transform.translation() = getPose().translation();
 
   bbox.extendWithTransformedBox(transform, Eigen::Vector3d(2 * radiusU_, 2 * radiusU_, 2 * radiusU_));
+}
+
+void bodies::Sphere::computeBoundingBox(bodies::OBB& bbox) const
+{
+  // it's a sphere, so we do not rotate the bounding box
+  Eigen::Isometry3d transform = Eigen::Isometry3d::Identity();
+  transform.translation() = getPose().translation();
+
+  bbox.setPoseAndExtents(transform, 2 * Eigen::Vector3d(radiusU_, radiusU_, radiusU_));
 }
 
 bool bodies::Sphere::samplePointInside(random_numbers::RandomNumberGenerator& rng, unsigned int max_attempts,
@@ -359,10 +372,12 @@ void bodies::Cylinder::useDimensions(const shapes::Shape* shape)  // (length, ra
 
 std::vector<double> bodies::Cylinder::getDimensions() const
 {
-  std::vector<double> d(2);
-  d[0] = radius_;
-  d[1] = length_;
-  return d;
+  return { radius_, length_ };
+}
+
+std::vector<double> bodies::Cylinder::getScaledDimensions() const
+{
+  return { radiusU_, 2 * length2_ };
 }
 
 void bodies::Cylinder::updateInternalData()
@@ -453,6 +468,11 @@ void bodies::Cylinder::computeBoundingBox(bodies::AABB& bbox) const
   bbox.extend(pa + e);
   bbox.extend(pb - e);
   bbox.extend(pb + e);
+}
+
+void bodies::Cylinder::computeBoundingBox(bodies::OBB& bbox) const
+{
+  bbox.setPoseAndExtents(getPose(), 2 * Eigen::Vector3d(radiusU_, radiusU_, length2_));
 }
 
 bool bodies::Cylinder::intersectsRay(const Eigen::Vector3d& origin, const Eigen::Vector3d& dir,
@@ -585,11 +605,12 @@ void bodies::Box::useDimensions(const shapes::Shape* shape)  // (x, y, z) = (len
 
 std::vector<double> bodies::Box::getDimensions() const
 {
-  std::vector<double> d(3);
-  d[0] = length_;
-  d[1] = width_;
-  d[2] = height_;
-  return d;
+  return { length_, width_, height_ };
+}
+
+std::vector<double> bodies::Box::getScaledDimensions() const
+{
+  return { 2 * length2_, 2 * width2_, 2 * height2_ };
 }
 
 void bodies::Box::updateInternalData()
@@ -683,6 +704,11 @@ void bodies::Box::computeBoundingBox(bodies::AABB& bbox) const
   bbox.setEmpty();
 
   bbox.extendWithTransformedBox(getPose(), 2 * Eigen::Vector3d(length2_, width2_, height2_));
+}
+
+void bodies::Box::computeBoundingBox(bodies::OBB& bbox) const
+{
+  bbox.setPoseAndExtents(getPose(), 2 * Eigen::Vector3d(length2_, width2_, height2_));
 }
 
 bool bodies::Box::intersectsRay(const Eigen::Vector3d& origin, const Eigen::Vector3d& dir,
@@ -978,7 +1004,12 @@ void bodies::ConvexMesh::useDimensions(const shapes::Shape* shape)
 
 std::vector<double> bodies::ConvexMesh::getDimensions() const
 {
-  return std::vector<double>();
+  return {};
+}
+
+std::vector<double> bodies::ConvexMesh::getScaledDimensions() const
+{
+  return {};
 }
 
 void bodies::ConvexMesh::computeScaledVerticesFromPlaneProjections()
@@ -1140,6 +1171,11 @@ void bodies::ConvexMesh::computeBoundingBox(bodies::AABB& bbox) const
 {
   bbox.setEmpty();
 
+  bounding_box_.computeBoundingBox(bbox);
+}
+
+void bodies::ConvexMesh::computeBoundingBox(bodies::OBB& bbox) const
+{
   bounding_box_.computeBoundingBox(bbox);
 }
 
