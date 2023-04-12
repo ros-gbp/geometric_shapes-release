@@ -38,44 +38,49 @@
 
 namespace geometric_shapes
 {
-/** Get the number of dimensions of a particular shape */
-template <int shape>
-constexpr unsigned int solidPrimitiveDimCount();
-
-template <>
-constexpr unsigned int solidPrimitiveDimCount<shape_msgs::SolidPrimitive::SPHERE>()
-{
-  return 1u;
-}
-
-template <>
-constexpr unsigned int solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>()
-{
-  return 3u;
-}
-
-template <>
-constexpr unsigned int solidPrimitiveDimCount<shape_msgs::SolidPrimitive::CYLINDER>()
-{
-  return 2u;
-}
-
-template <>
-constexpr unsigned int solidPrimitiveDimCount<shape_msgs::SolidPrimitive::CONE>()
-{
-  return 2u;
-}
-
-// clang-format off
-template <int shape>
-struct [[deprecated("Replace SolidPrimitiveDimCount<SHAPE>::value with solidPrimitiveDimCount<SHAPE>()")]]
-SolidPrimitiveDimCount
-// clang-format on
+/** \brief The number of dimensions of a particular shape */
+template <int>
+struct SolidPrimitiveDimCount
 {
   enum
   {
-    value = solidPrimitiveDimCount<shape>()
+    value = 0u
   };
 };
 
+template <>
+struct SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::SPHERE>
+{
+  enum
+  {
+    value = 1u
+  };
+};
+
+template <>
+struct SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>
+{
+  enum
+  {
+    value = 3u
+  };
+};
+
+template <>
+struct SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CONE>
+{
+  enum
+  {
+    value = 2u
+  };
+};
+
+template <>
+struct SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CYLINDER>
+{
+  enum
+  {
+    value = 2u
+  };
+};
 }  // namespace geometric_shapes

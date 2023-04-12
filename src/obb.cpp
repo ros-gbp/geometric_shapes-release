@@ -2,7 +2,7 @@
 
 #include <fcl/config.h>
 
-#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION == 5
+#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION <= 5
 #include <fcl/BV/OBB.h>
 typedef fcl::Vec3f FCL_Vec3;
 typedef fcl::OBB FCL_OBB;
@@ -14,7 +14,7 @@ typedef fcl::OBB<double> FCL_OBB;
 
 namespace bodies
 {
-#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION == 5
+#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION <= 5
 inline FCL_Vec3 toFcl(const Eigen::Vector3d& eigenVec)
 {
   FCL_Vec3 result;
@@ -25,7 +25,7 @@ inline FCL_Vec3 toFcl(const Eigen::Vector3d& eigenVec)
 #define toFcl
 #endif
 
-#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION == 5
+#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION <= 5
 Eigen::Vector3d fromFcl(const FCL_Vec3& fclVec)
 {
   return Eigen::Map<const Eigen::MatrixXd>(fclVec.data.vs, 3, 1);
@@ -78,7 +78,7 @@ void OBB::setPoseAndExtents(const Eigen::Isometry3d& pose, const Eigen::Vector3d
 {
   const auto rotation = pose.linear();
 
-#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION == 5
+#if FCL_MAJOR_VERSION == 0 && FCL_MINOR_VERSION <= 5
   obb_->axis[0] = toFcl(rotation.col(0));
   obb_->axis[1] = toFcl(rotation.col(1));
   obb_->axis[2] = toFcl(rotation.col(2));
