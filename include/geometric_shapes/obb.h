@@ -53,7 +53,8 @@ class OBBPrivate;
 class OBB
 {
 public:
-  /** Initialize an oriented bounding box at position 0, with 0 extents and identity orientation. */
+  /** \brief Initialize an oriented bounding box at position 0, with 0 extents and
+   *         identity orientation. */
   OBB();
   OBB(const OBB& other);
   OBB(const Eigen::Isometry3d& pose, const Eigen::Vector3d& extents);

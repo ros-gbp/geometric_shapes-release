@@ -8,6 +8,7 @@ on:
   pull_request:
   push:
     branches:
+      - noetic-devel
       - melodic-devel
 
 jobs:
@@ -15,13 +16,13 @@ jobs:
     strategy:
       matrix:
         env:
-          - ROS_DISTRO: kinetic
-            ROS_REPO: main
           - ROS_DISTRO: melodic
+            ROS_REPO: main
+          - ROS_DISTRO: noetic
             ROS_REPO: main
             CLANG_TIDY: pedantic
             CATKIN_LINT: pedantic
-          - ROS_DISTRO: melodic
+          - ROS_DISTRO: noetic
             ROS_REPO: testing
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
