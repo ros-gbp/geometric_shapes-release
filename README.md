@@ -1,3 +1,26 @@
+## geometric_shapes (noetic) - 0.7.7-1
+
+The packages in the `geometric_shapes` repository were released into the `noetic` distro by running `/usr/bin/bloom-release --ros-distro noetic geometric_shapes` on `Thu, 18 Jul 2024 07:44:33 -0000`
+
+The `geometric_shapes` package was released.
+
+Version of package(s) in repository `geometric_shapes`:
+
+- upstream repository: https://github.com/ros-planning/geometric_shapes.git
+- release repository: https://github.com/ros-gbp/geometric_shapes-release.git
+- rosdistro version: `0.7.6-1`
+- old version: `0.7.6-1`
+- new version: `0.7.7-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.24.0`
+- rosdistro version: `0.9.1`
+- vcstools version: `0.1.42`
+
+
 ## geometric_shapes (noetic) - 0.7.6-1
 
 The packages in the `geometric_shapes` repository were released into the `noetic` distro by running `/usr/bin/bloom-release -r noetic geometric_shapes` on `Tue, 07 May 2024 06:18:19 -0000`
