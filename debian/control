@@ -1,0 +1,12 @@
+Source: ros-noetic-geometric-shapes
+Section: misc
+Priority: optional
+Maintainer: Tyler Weaver <tyler@picknik.ai>
+Build-Depends: debhelper (>= 9.0.0), libassimp-dev, libboost-all-dev, libconsole-bridge-dev, libeigen3-dev, libqhull-dev, pkg-config, ros-noetic-catkin (>= 0.5.68), ros-noetic-eigen-stl-containers, ros-noetic-fcl, ros-noetic-octomap, ros-noetic-random-numbers, ros-noetic-resource-retriever, ros-noetic-rosunit <!nocheck>, ros-noetic-shape-msgs, ros-noetic-visualization-msgs
+Homepage: http://ros.org/wiki/geometric_shapes
+Standards-Version: 3.9.2
+
+Package: ros-noetic-geometric-shapes
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libassimp-dev, libboost-all-dev, libconsole-bridge-dev, libeigen3-dev, libqhull-dev, ros-noetic-eigen-stl-containers, ros-noetic-fcl, ros-noetic-octomap, ros-noetic-random-numbers, ros-noetic-resource-retriever, ros-noetic-shape-msgs, ros-noetic-visualization-msgs
+Description: Generic definitions of geometric shapes and bodies.
